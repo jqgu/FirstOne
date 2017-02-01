@@ -1,0 +1,28 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/welcome"
+    android:orientation="vertical"
+    android:gravity="bottom"
+
+    tools:context="com.example.zg.firstone.Activity_Welcome">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Easy Financial"
+        android:textColor="#c7cbcd"
+        android:typeface="sans"
+        android:layout_gravity="center"
+        android:layout_marginBottom="@dimen/activity_vertical_margin"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="我们致力打造最全面的金融平台"
+        android:fontFamily=""
+        android:textColor="#c7cbcd"
+        android:layout_gravity="center"
+        android:layout_marginBottom="@dimen/activity_vertical_margin"/>
+
+</LinearLayout>
