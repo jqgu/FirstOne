@@ -32,6 +32,7 @@ public class Activity_Login extends AppCompatActivity {
     int ID;
     int balance;
     int status;
+    int zhiyuan;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
