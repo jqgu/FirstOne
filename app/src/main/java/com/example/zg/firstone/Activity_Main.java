@@ -16,7 +16,9 @@ public class Activity_Main extends AppCompatActivity implements BottomNavigation
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        if (getSupportActionBar() != null){
+            getSupportActionBar().hide();
+        }
         setContentView(R.layout.activity_main);
 
         BottomNavigationBar bottomNavigationBar = (BottomNavigationBar) findViewById(R.id.bottom_navigation_bar);
@@ -38,6 +40,7 @@ public class Activity_Main extends AppCompatActivity implements BottomNavigation
         fragments = getFragments();
         setDefaultFragment();
         bottomNavigationBar.setTabSelectedListener(this);
+        //ArrayList<CharSequence> friendsLists = getIntent().getCharSequenceArrayListExtra("friendsList");
     }
 
 
