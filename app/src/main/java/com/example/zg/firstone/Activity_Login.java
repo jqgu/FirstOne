@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONException;
 
@@ -23,6 +24,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.MalformedURLException;
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class Activity_Login extends AppCompatActivity {
     Thread thread;
@@ -32,8 +34,7 @@ public class Activity_Login extends AppCompatActivity {
     int ID;
     int balance;
     int status;
-    int zhiyuan;
-
+    ArrayList<CharSequence> friendsName = new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,6 +68,13 @@ public class Activity_Login extends AppCompatActivity {
                                 name = object.getString("name");
                                 balance = object.getInt("balance");
                                 ID = object.getInt("ID");
+
+                                JSONArray list = object.getJSONArray("friends");
+                                friendsName.clear();
+                                for(int i = 0; i < list.length(); i++){
+                                    friendsName.add(list.getString(i));
+                                }
+
                             } catch (JSONException e) {
                                 // TODO Auto-generated catch block
                                 e.printStackTrace();
@@ -107,12 +115,18 @@ public class Activity_Login extends AppCompatActivity {
                         break;
                     }
                     case 0: {
+//                        StringBuilder tmp = new StringBuilder();
+//                        for(String name : friendsName){
+//                            tmp.append(name+"\n");
+//                        }
+//                        Toast.makeText(getApplicationContext(), tmp, Toast.LENGTH_SHORT).show();
                         user.setID(ID);
                         user.setName(name);
                         user.setBalance(balance);
-                        Toast.makeText(getApplicationContext(), "name:" + user.getName() + ", ID:" + user.getID() + ",balance:" + user.getBalance(), Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent();
+                        intent.removeExtra("friendsList");
                         intent.setClass(getApplicationContext(), Activity_Main.class);
+                        intent.putCharSequenceArrayListExtra("friendsList", friendsName);
                         startActivity(intent);
                         //finish();
                         break;
