@@ -10,7 +10,6 @@ public class Activity_Welcome extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //requestWindowFeature(Window.FEATURE_NO_TITLE);
         if (getSupportActionBar() != null){
             getSupportActionBar().hide();
         }
@@ -20,7 +19,6 @@ public class Activity_Welcome extends AppCompatActivity {
 
     private Handler mHandler = new Handler() {
         public void handleMessage(android.os.Message msg) {
-            //Toast.makeText(getApplicationContext(), "welcome",Toast.LENGTH_LONG).show();
             switch (msg.what) {
                 case GOTO_MAIN_ACTIVITY:
                     Intent intent = new Intent();

@@ -15,7 +15,6 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,11 +32,6 @@ public class Fragment_Home extends Fragment {
         balance.setText("$"+Global_User.getInstance().getBalance());
 
         ArrayList<CharSequence> list = getActivity().getIntent().getCharSequenceArrayListExtra("friendsList");
-//        StringBuilder tmp = new StringBuilder();
-//        for(CharSequence name : list){
-//            tmp.append(name+"--\t");
-//        }
-//        Log.d("friend", tmp.toString());
         ImageView userImage = (ImageView)getActivity().findViewById(R.id.user);
         userImage.setBackgroundResource(Global_Friend.friendImageList.get(Global_User.getInstance().getName()));
 
@@ -69,7 +63,6 @@ public class Fragment_Home extends Fragment {
 
 class FriendListAdapter extends ArrayAdapter<Global_Friend> {
     private int resourceId;
-
     public FriendListAdapter(Context context, int textViewResourceId,
                              List<Global_Friend> objects) {
         super(context, textViewResourceId, objects);
