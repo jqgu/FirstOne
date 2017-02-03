@@ -18,7 +18,6 @@ public class Fragment_Pay extends Fragment {
         super.onActivityCreated(savedInstanceState);
     }
 
-
     public static Fragment_Pay newInstance(String param) {
         Fragment_Pay fragment = new Fragment_Pay();
         Bundle args = new Bundle();

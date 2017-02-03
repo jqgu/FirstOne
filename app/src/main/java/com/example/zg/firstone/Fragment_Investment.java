@@ -57,7 +57,6 @@ public class Fragment_Investment extends Fragment {
 
 class CompanyAdapter extends ArrayAdapter<Global_Company> {
     private int resourceId;
-
     public CompanyAdapter(Context context, int textViewResourceId,
                           List<Global_Company> objects) {
         super(context, textViewResourceId, objects);

@@ -9,26 +9,20 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONException;
-
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.net.ConnectException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.MalformedURLException;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.concurrent.TimeoutException;
 
 public class Activity_Login extends AppCompatActivity {
     Thread thread;
@@ -68,14 +62,13 @@ public class Activity_Login extends AppCompatActivity {
                             try {
                                 URL url = new URL("http://192.168.0.115/db/gate.php?username=" + user + "&passwd=" + passwd);
                                 HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
-                                urlConnection.setConnectTimeout(3000);
+                                urlConnection.setConnectTimeout(10000);
                                 urlConnection.setReadTimeout(3000);
 
                                 InputStreamReader isr = new InputStreamReader(urlConnection.getInputStream());
                                 BufferedReader br = new BufferedReader(isr);
                                 String result = br.readLine();
 
-                                //Log.d("chris", "ready to parse json");
                                 JSONObject object = new JSONObject(result);
                                 status = object.getInt("status");
                                 name = object.getString("name");
@@ -97,7 +90,6 @@ public class Activity_Login extends AppCompatActivity {
                                 e.printStackTrace();
                             } catch (IOException e) {
                                 // TODO Auto-generated catch block
-                                Log.d("ppppp","Connection Failed");
                                 m1.what = -1;
                                 e.printStackTrace();
                             }
@@ -138,11 +130,6 @@ public class Activity_Login extends AppCompatActivity {
                         break;
                     }
                     case 0: {
-//                        StringBuilder tmp = new StringBuilder();
-//                        for(String name : friendsName){
-//                            tmp.append(name+"\n");
-//                        }
-//                        Toast.makeText(getApplicationContext(), tmp, Toast.LENGTH_SHORT).show();
                         user.setID(ID);
                         user.setName(name);
                         user.setBalance(balance);
@@ -170,7 +157,6 @@ public class Activity_Login extends AppCompatActivity {
     }
 
     private void progress_Dialog_show() {
-
         progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         progressDialog.setIndeterminate(false);
         progressDialog.setCancelable(true);

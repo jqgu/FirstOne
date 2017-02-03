@@ -6,7 +6,6 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-
 import com.ashokvarma.bottomnavigation.BottomNavigationBar;
 import com.ashokvarma.bottomnavigation.BottomNavigationItem;
 import java.util.ArrayList;
@@ -40,7 +39,6 @@ public class Activity_Main extends AppCompatActivity implements BottomNavigation
         fragments = getFragments();
         setDefaultFragment();
         bottomNavigationBar.setTabSelectedListener(this);
-        //ArrayList<CharSequence> friendsLists = getIntent().getCharSequenceArrayListExtra("friendsList");
     }
 
 
