@@ -1,6 +1,7 @@
 package com.example.zg.firstone;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -8,6 +9,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -20,11 +22,13 @@ import org.json.JSONException;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.net.ConnectException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.MalformedURLException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.concurrent.TimeoutException;
 
 public class Activity_Login extends AppCompatActivity {
     Thread thread;
@@ -35,22 +39,28 @@ public class Activity_Login extends AppCompatActivity {
     int balance;
     int status;
     ArrayList<CharSequence> friendsName = new ArrayList<>();
+    static ProgressDialog progressDialog = null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
         Button login = (Button) findViewById(R.id.login);
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(getWindow().getDecorView().getWindowToken(), 0);
+                progressDialog = new ProgressDialog(Activity_Login.this);
+                progress_Dialog_show();
+
                 thread = new Thread(new Runnable() {
                     @Override
                     public void run() {
                         Message m1 = handler.obtainMessage();
                         String user = ((EditText) findViewById(R.id.user_name)).getText().toString().trim();
                         String passwd = ((EditText) findViewById(R.id.passwd)).getText().toString().trim();
+
                         int checkCode = check(user, passwd);
                         if (checkCode != 0) {
                             m1.what = checkCode;
@@ -58,6 +68,9 @@ public class Activity_Login extends AppCompatActivity {
                             try {
                                 URL url = new URL("http://192.168.0.115/db/gate.php?username=" + user + "&passwd=" + passwd);
                                 HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+                                urlConnection.setConnectTimeout(3000);
+                                urlConnection.setReadTimeout(3000);
+
                                 InputStreamReader isr = new InputStreamReader(urlConnection.getInputStream());
                                 BufferedReader br = new BufferedReader(isr);
                                 String result = br.readLine();
@@ -74,6 +87,7 @@ public class Activity_Login extends AppCompatActivity {
                                 for(int i = 0; i < list.length(); i++){
                                     friendsName.add(list.getString(i));
                                 }
+                                m1.what = status;
 
                             } catch (JSONException e) {
                                 // TODO Auto-generated catch block
@@ -83,9 +97,11 @@ public class Activity_Login extends AppCompatActivity {
                                 e.printStackTrace();
                             } catch (IOException e) {
                                 // TODO Auto-generated catch block
+                                Log.d("ppppp","Connection Failed");
+                                m1.what = -1;
                                 e.printStackTrace();
                             }
-                            m1.what = status;
+
                         }
                         handler.sendMessage(m1);
                     }
@@ -94,7 +110,7 @@ public class Activity_Login extends AppCompatActivity {
             }
         });
 
-        handler = new Handler() {
+        handler = new Handler(getApplicationContext().getMainLooper()) {
             @Override
             public void handleMessage(Message msg) {
                 // TODO Auto-generated method stub
@@ -108,7 +124,14 @@ public class Activity_Login extends AppCompatActivity {
                         dialog.dismiss();
                     }
                 });
+                if(progressDialog != null && progressDialog.isShowing())
+                    progressDialog.cancel();
                 switch (msg.what) {
+                    case -1: {
+                        builder.setMessage("Connection Failed, Please try again!");
+                        builder.create().show();
+                        break;
+                    }
                     case 1: {
                         builder.setMessage("Wrong username or password, please check again");
                         builder.create().show();
@@ -144,6 +167,14 @@ public class Activity_Login extends AppCompatActivity {
                 }
             }
         };
+    }
+
+    private void progress_Dialog_show() {
+
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progressDialog.setIndeterminate(false);
+        progressDialog.setCancelable(true);
+        progressDialog.show();
     }
 
     private int check(String username, String passwd) {
